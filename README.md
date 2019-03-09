@@ -2,6 +2,12 @@
 
 A Binary Transformer Plugin to resize image
 
+To use it, please also install gem [Binary Transformer](https://gitlab.com/ruby-gem/binary-transformer), and 
+see [usage](#Usage).
+
+This depends on [GraphicsMagick](http://www.graphicsmagick.org/), so please ensure its available via
+global PATH. 
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -19,6 +25,42 @@ Or install it yourself as:
     $ gem install bt_image_resizer
 
 ## Usage
+
+This depends on [GraphicsMagick](http://www.graphicsmagick.org/), so please ensure its available via
+global PATH. 
+
+To check whether `GraphicsMagick` is available, run the command 
+```bash
+$ gm version
+```
+
+---
+This is a [Binary Transformer](https://gitlab.com/ruby-gem/binary-transformer) implementation. Please
+ensure you installed the gem to use it.
+
+Only works for `image/png` and `image/jpeg` signatures in byte.
+
+```ruby
+require "bt_image_resizer"
+require "binary_transformer"
+
+# Create re-sizer that re-sizes the image to 20% width and 20% height 
+resize = BT::ResizeImage.new(20, 20)
+
+# Read the binary of image
+binary = IO.binread "image.png"
+
+# Use binary_transformer module to allow stream-like piping
+binary.extend StreamLike
+
+# Resize the binary
+small = binary > resize
+
+# Write it back out
+IO.binwrite "small.png", small
+```
+
+This can be used in pipeline with other Binary Transformer plugins!
 
 ## Development
 
